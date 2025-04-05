@@ -252,33 +252,28 @@ document.addEventListener('DOMContentLoaded', function() {
             party: candidateCard.querySelector('.party').textContent
         };
         
-        // Lưu vào state
-        EVoting.state.selectedCandidate = candidateData;
-        console.log("Selected candidate:", EVoting.state.selectedCandidate);
+        // Store selected candidate data globally for the review page
+        if (!window.EVoting) {
+            window.EVoting = {};
+        }
+        if (!window.EVoting.state) {
+            window.EVoting.state = {};
+        }
+        window.EVoting.state.selectedCandidate = candidateData;
         
-        // Hiện loading
-        EVoting.ui.showLoading("Đang chuẩn bị thông tin xem lại...");
+        // Hide voting section and show review section
+        document.getElementById('voting-step').style.display = 'none';
+        document.querySelector('.review-section').style.display = 'block';
         
-        // Chuyển sang bước xem lại sau khi loading
-        setTimeout(() => {
-            EVoting.ui.hideLoading();
-            
-            // Ẩn bước bỏ phiếu, hiện bước xem lại
-            document.getElementById('voting-step').style.display = 'none';
-            
-            const reviewSection = document.querySelector('.review-section');
-            if (reviewSection) {
-                reviewSection.style.display = 'block';
-                
-                // Khởi tạo phần xem lại nếu có
-                if (typeof initializeReview === 'function') {
-                    initializeReview();
-                }
-            }
-            
-            // Cập nhật thanh tiến trình
-            updateProgressBar(2); // Review là bước 3 (index 2)
-        }, 1500);
+        // Update progress bar to show step 3 (Review) as active
+        updateProgressBar(2);  // index 2 is the third step (Review)
+        
+        // Initialize the review section
+        if (typeof initializeReview === 'function') {
+            initializeReview();
+        } else {
+            console.error("Review initialization function not found");
+        }
     }
     
     // Hiển thị thông tin chi tiết ứng viên trong modal
