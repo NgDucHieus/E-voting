@@ -1,0 +1,91 @@
+<div class="voting-interface">
+    <div class="ballot-header">
+        <h2>Bầu cử Chủ tịch Nước</h2>
+        <p class="ballot-instructions">Vui lòng chọn MỘT ứng viên từ danh sách dưới đây. Việc bỏ phiếu của bạn được mã hóa và bảo mật.</p>
+    </div>
+
+    <div class="candidates-list" id="candidates-container">
+        <!-- Candidate 1 -->
+        <div class="candidate-card">
+            <div class="candidate-photo">
+                <img src="assets/candidates/candidate1.jpg" alt="Nguyễn Văn A">
+            </div>
+            <div class="candidate-info">
+                <h3>Nguyễn Văn A</h3>
+                <div class="party">Đảng Nhân dân</div>
+                <p class="bio">Ứng cử viên có hơn 20 năm kinh nghiệm trong lĩnh vực chính trị và quản lý nhà nước.</p>
+            </div>
+            <div class="candidate-selection">
+                <input type="radio" id="candidate1" name="candidate" value="candidate1">
+                <label for="candidate1">Chọn ứng viên này</label>
+            </div>
+        </div>
+
+        <!-- Candidate 2 -->
+        <div class="candidate-card">
+            <div class="candidate-photo">
+                <img src="assets/candidates/candidate2.jpg" alt="Trần Thị B">
+            </div>
+            <div class="candidate-info">
+                <h3>Trần Thị B</h3>
+                <div class="party">Đảng Dân chủ</div>
+                <p class="bio">Chuyên gia kinh tế với nhiều đóng góp trong việc phát triển chính sách kinh tế quốc gia.</p>
+            </div>
+            <div class="candidate-selection">
+                <input type="radio" id="candidate2" name="candidate" value="candidate2">
+                <label for="candidate2">Chọn ứng viên này</label>
+            </div>
+        </div>
+
+        <!-- Candidate 3 -->
+        <div class="candidate-card">
+            <div class="candidate-photo">
+                <img src="assets/candidates/candidate3.jpg" alt="Lê Văn C">
+            </div>
+            <div class="candidate-info">
+                <h3>Lê Văn C</h3>
+                <div class="party">Đảng Tiến bộ</div>
+                <p class="bio">Nhà lãnh đạo trẻ với tầm nhìn hiện đại về phát triển đất nước và hội nhập quốc tế.</p>
+            </div>
+            <div class="candidate-selection">
+                <input type="radio" id="candidate3" name="candidate" value="candidate3">
+                <label for="candidate3">Chọn ứng viên này</label>
+            </div>
+        </div>
+
+        <!-- Candidate 4 -->
+        <div class="candidate-card">
+            <div class="candidate-photo">
+                <img src="assets/candidates/candidate4.jpg" alt="Phạm Thị D">
+            </div>
+            <div class="candidate-info">
+                <h3>Phạm Thị D</h3>
+                <div class="party">Đảng Đổi mới</div>
+                <p class="bio">Chuyên gia về luật quốc tế và ngoại giao với kinh nghiệm làm việc tại các tổ chức quốc tế.</p>
+            </div>
+            <div class="candidate-selection">
+                <input type="radio" id="candidate4" name="candidate" value="candidate4">
+                <label for="candidate4">Chọn ứng viên này</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading state (hidden by default) -->
+    <div class="candidates-loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Đang tải thông tin ứng viên...</p>
+    </div>
+
+    <!-- Empty state (hidden by default) -->
+    <div class="no-candidates" style="display: none;">
+        <i class="fas fa-ballot-check"></i>
+        <h3>Không có ứng viên</h3>
+        <p>Hiện tại không có thông tin về các ứng viên cho cuộc bỏ phiếu này.</p>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="voting-navigation">
+        <button type="button" class="btn btn-outline" id="reset-selection">Xóa lựa chọn</button>
+        <button type="button" class="btn btn-primary" id="proceed-to-review" disabled>Xem lại phiếu bầu</button>
+    </div>
+</div> 

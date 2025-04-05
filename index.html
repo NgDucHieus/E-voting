@@ -18,6 +18,67 @@
         #biometric-verification-step {
             display: none;
         }
+        
+        /* Initial states for main sections */
+        #voting-step {
+            display: none;
+        }
+        
+        /* Demo Mode Button */
+        .demo-mode-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .demo-mode-button:hover {
+            background-color: #e68a00;
+        }
+        
+        /* Demo Mode Panel */
+        .demo-panel {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            padding: 15px;
+            z-index: 9999;
+            display: none;
+            width: 220px;
+        }
+        
+        .demo-panel h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .demo-panel button {
+            display: block;
+            width: 100%;
+            margin-bottom: 8px;
+            padding: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .demo-panel button:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -78,6 +139,9 @@
             </div>
         </section>
         
+        <!-- Voting Section -->
+        <div id="voting-section-container"></div>
+        
         <!-- Review Section -->
         <section class="review-section" style="display: none;">
             <div id="review-section"></div>
@@ -91,10 +155,20 @@
     <div id="login-modal"></div>
     <div id="signup-modal"></div>
     <div id="forgot-password-modal"></div>
+    
+    <!-- Demo Mode Button & Panel -->
+    <button class="demo-mode-button" id="demo-mode-button">Chế độ Demo</button>
+    <div class="demo-panel" id="demo-panel">
+        <h4>Chọn Giai Đoạn:</h4>
+        <button id="demo-auth">Xác thực</button>
+        <button id="demo-vote">Bỏ phiếu</button>
+        <button id="demo-review">Xem lại</button>
+    </div>
 
     <!-- JavaScript Files -->
     <!-- Main -->
     <script src="js/main.js"></script>
+    <script src="js/voting.js"></script>
     
     <script>
         // Function to include HTML components
@@ -129,6 +203,11 @@
                 const biometricVerificationResponse = await fetch('components/auth/biometric-verification.html');
                 biometricVerification.innerHTML = await biometricVerificationResponse.text();
                 
+                // Include voting section
+                const votingContainer = document.getElementById('voting-section-container');
+                const votingResponse = await fetch('components/voting/voting-section.html');
+                votingContainer.innerHTML = await votingResponse.text();
+                
                 // Include review section
                 const reviewSection = document.getElementById('review-section');
                 const reviewResponse = await fetch('components/auth/review-section.html');
@@ -151,6 +230,8 @@
                 
                 // Now that all components are loaded, initialize the auth steps
                 initAuthSteps();
+                // Initialize the demo mode
+                initDemoMode();
             } catch (error) {
                 console.error("Error loading components:", error);
             }
@@ -261,13 +342,17 @@
                     
                     // Simulate verification (Replace with actual API call)
                     setTimeout(function() {
-                        console.log("Authentication complete");
-                        // Hide auth steps section and show success or proceed to voting interface
+                        console.log("Authentication complete, transitioning to voting");
+                        // Hide auth phase section and show voting interface
                         document.querySelector('.auth-phase-section').style.display = 'none';
                         
-                        // Here you would redirect to voting interface or show success message
-                        // For now, just show an alert
-                        showAlert('Authentication successful! Redirecting to voting interface...', 'success');
+                        // Show voting section
+                        document.getElementById('voting-step').style.display = 'block';
+                        
+                        // Initialize voting interface
+                        if (typeof initializeVoting === 'function') {
+                            initializeVoting();
+                        }
                         
                         // Reset button state
                         submitBtn.innerHTML = originalBtnText;
@@ -275,6 +360,113 @@
                     }, 1500);
                 });
             }
+        }
+        
+        // Initialize Demo Mode
+        function initDemoMode() {
+            const demoButton = document.getElementById('demo-mode-button');
+            const demoPanel = document.getElementById('demo-panel');
+            const demoAuth = document.getElementById('demo-auth');
+            const demoVote = document.getElementById('demo-vote');
+            const demoReview = document.getElementById('demo-review');
+            
+            // Toggle demo panel
+            demoButton.addEventListener('click', function() {
+                if (demoPanel.style.display === 'block') {
+                    demoPanel.style.display = 'none';
+                } else {
+                    demoPanel.style.display = 'block';
+                }
+            });
+            
+            // Demo auth button
+            demoAuth.addEventListener('click', function() {
+                // Reset to authentication step
+                document.querySelector('.auth-phase-section').style.display = 'block';
+                document.getElementById('voter-verification-step').style.display = 'block';
+                document.getElementById('otp-verification-step').style.display = 'none';
+                document.getElementById('biometric-verification-step').style.display = 'none';
+                document.getElementById('voting-step').style.display = 'none';
+                document.querySelector('.review-section').style.display = 'none';
+                
+                // Update progress bar
+                const steps = document.querySelectorAll('.progress-steps .step');
+                steps.forEach((step, index) => {
+                    if (index === 0) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+                
+                updateProgressIndicator(1);
+                demoPanel.style.display = 'none';
+            });
+            
+            // Demo vote button
+            demoVote.addEventListener('click', function() {
+                // Hide other sections and show voting section
+                document.querySelector('.auth-phase-section').style.display = 'none';
+                document.getElementById('voting-step').style.display = 'block';
+                document.querySelector('.review-section').style.display = 'none';
+                
+                // Update progress bar
+                const steps = document.querySelectorAll('.progress-steps .step');
+                steps.forEach((step, index) => {
+                    if (index < 1) {
+                        step.classList.remove('active');
+                        step.classList.add('completed');
+                    } else if (index === 1) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+                
+                // Initialize voting interface
+                if (typeof initializeVoting === 'function') {
+                    initializeVoting();
+                }
+                
+                demoPanel.style.display = 'none';
+            });
+            
+            // Demo review button
+            demoReview.addEventListener('click', function() {
+                // Set dummy candidate data for review
+                if (window.EVoting && EVoting.state) {
+                    EVoting.state.selectedCandidate = {
+                        id: 'candidate1',
+                        name: 'Nguyễn Văn A',
+                        party: 'Đảng Nhân dân'
+                    };
+                }
+                
+                // Hide other sections and show review section
+                document.querySelector('.auth-phase-section').style.display = 'none';
+                document.getElementById('voting-step').style.display = 'none';
+                document.querySelector('.review-section').style.display = 'block';
+                
+                // Update progress bar
+                const steps = document.querySelectorAll('.progress-steps .step');
+                steps.forEach((step, index) => {
+                    if (index < 2) {
+                        step.classList.remove('active');
+                        step.classList.add('completed');
+                    } else if (index === 2) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+                
+                // Initialize review if possible
+                if (typeof initializeReview === 'function') {
+                    initializeReview();
+                }
+                
+                demoPanel.style.display = 'none';
+            });
         }
         
         // Update progress indicator
