@@ -1,0 +1,63 @@
+<!-- Review Section - Final verification before submitting ballot -->
+<div class="review-section" id="review-step">
+    <div class="review-header">
+        <h2>Xem lại Phiếu bầu của Bạn</h2>
+        <p class="review-instructions">
+            Vui lòng kiểm tra kỹ các lựa chọn bạn đã thực hiện bên dưới. 
+            Đây là cơ hội cuối cùng để bạn thay đổi trước khi gửi phiếu bầu chính thức.
+        </p>
+    </div>
+
+    <div class="review-content">
+        <div class="review-card">
+            <div class="review-card-header">
+                <h3>Tóm tắt Lựa chọn của Bạn</h3>
+            </div>
+            
+            <div class="review-card-body" id="selections-summary">
+                <!-- Selection summary will be loaded dynamically here -->
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Đang tải dữ liệu...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="security-notice">
+            <i class="fas fa-shield-alt"></i>
+            <p>Phiếu bầu của bạn sẽ được gửi đi một cách an toàn và ẩn danh. Không ai có thể biết bạn đã bỏ phiếu cho ai.</p>
+        </div>
+    </div>
+
+    <div class="review-actions">
+        <button type="button" id="back-to-voting" class="btn btn-outline">
+            <i class="fas fa-arrow-left"></i> Quay lại để Sửa
+        </button>
+        <button type="button" id="confirm-vote" class="btn btn-primary">
+            Xác nhận và Gửi Phiếu bầu <i class="fas fa-check-circle"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Confirmation Dialog -->
+<div class="modal" id="confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="confirmation-title" aria-hidden="true">
+    <div class="modal-content confirmation-modal-content">
+        <div class="modal-header">
+            <h2 id="confirmation-title">Xác nhận Gửi Phiếu bầu</h2>
+            <button type="button" class="close-btn" aria-label="Đóng">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="confirmation-icon">
+                <i class="fas fa-vote-yea"></i>
+            </div>
+            <p class="confirmation-message">
+                Bạn có chắc chắn muốn gửi phiếu bầu với các lựa chọn này không?
+                <strong>Hành động này không thể hoàn tác sau khi hoàn thành.</strong>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline modal-close">Hủy bỏ</button>
+            <button type="button" class="btn btn-primary" id="final-submit">Đồng ý Gửi Phiếu</button>
+        </div>
+    </div>
+</div> 

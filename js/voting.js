@@ -4,16 +4,40 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the voting interface when needed
-    window.initializeVoting = function() {
-        console.log("Initializing voting interface");
-        loadBallot();
-        setupEventListeners();
+    // Lưu trữ state
+    const state = {
+        selectedCandidateId: null,
+        initialized: false
     };
     
-    // Load ballot component
+    // Cache DOM elements và selectors thường xuyên sử dụng
+    const selectors = {
+        ballotContainer: '#ballot-container',
+        candidateCard: '.candidate-card',
+        candidateRadio: 'input[name="candidate"]',
+        viewDetails: '.view-details',
+        proceedButton: '#proceed-to-review',
+        resetButton: '#reset-selection',
+        modal: '#candidate-details-modal',
+        modalContent: '#candidate-details-content',
+        closeModal: '.modal .close-btn, .modal .modal-close',
+        progressSteps: '.progress-steps .step'
+    };
+    
+    // Initialize the voting interface when needed
+    window.initializeVoting = function() {
+        if (state.initialized) return;
+        
+        console.log("Initializing voting interface");
+        loadBallot();
+        updateProgressBar(1); // Voting is step 2 (index 1)
+        
+        state.initialized = true;
+    };
+    
+    // Load ballot component with improved error handling
     function loadBallot() {
-        const ballotContainer = document.getElementById('ballot-container');
+        const ballotContainer = document.querySelector(selectors.ballotContainer);
         if (!ballotContainer) {
             console.error("Ballot container not found");
             return;
@@ -24,10 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Fetch ballot component
         fetch('components/voting/ballot.html')
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            })
             .then(html => {
                 ballotContainer.innerHTML = html;
-                // After loading the ballot, setup the event handlers for it
                 setupBallotEvents();
             })
             .catch(error => {
@@ -36,219 +64,250 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
     
-    // Setup general event listeners
-    function setupEventListeners() {
-        // Update progress bar to show the voting step is active
-        const votingStep = document.querySelector('.progress-steps .step:nth-child(2)');
-        if (votingStep) {
-            const steps = document.querySelectorAll('.progress-steps .step');
-            steps.forEach((step, index) => {
-                if (index < 1) {
-                    step.classList.remove('active');
-                    step.classList.add('completed');
-                } else if (index === 1) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active', 'completed');
-                }
-            });
-        }
+    // Cập nhật thanh tiến trình
+    function updateProgressBar(activeIndex) {
+        const steps = document.querySelectorAll(selectors.progressSteps);
+        if (!steps.length) return;
+        
+        steps.forEach((step, index) => {
+            if (index < activeIndex) {
+                step.classList.remove('active');
+                step.classList.add('completed');
+            } else if (index === activeIndex) {
+                step.classList.add('active');
+                step.classList.remove('completed');
+            } else {
+                step.classList.remove('active', 'completed');
+            }
+        });
     }
     
-    // Setup ballot-specific event listeners once the ballot is loaded
+    // Set up event listeners using event delegation where possible
     function setupBallotEvents() {
-        // Get all candidate cards, radio inputs, and related elements
-        const candidateCards = document.querySelectorAll('.candidate-card');
-        const candidateRadios = document.querySelectorAll('input[name="candidate"]');
-        const proceedButton = document.getElementById('proceed-to-review');
-        const resetButton = document.getElementById('reset-selection');
-        const viewDetailsLinks = document.querySelectorAll('.view-details');
+        const candidatesContainer = document.getElementById('candidates-container');
+        const proceedButton = document.querySelector(selectors.proceedButton);
+        const resetButton = document.querySelector(selectors.resetButton);
         
-        if (!candidateCards.length || !candidateRadios.length || !proceedButton || !resetButton) {
-            console.error("Candidate selection elements not found");
+        if (!candidatesContainer || !proceedButton || !resetButton) {
+            console.error("Required ballot elements not found");
             return;
         }
         
-        // Add event listeners to candidate cards for selection
-        candidateCards.forEach(card => {
-            // Make the entire card selectable (except for "View Details" link)
-            card.addEventListener('click', function(e) {
-                // Don't handle click if clicked on the view details link
-                if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
-                    return;
-                }
-                
-                // Find the radio button in this card and check it
-                const radio = this.querySelector('input[type="radio"]');
-                radio.checked = true;
-                
-                // Trigger change event
-                radio.dispatchEvent(new Event('change'));
-            });
-            
-            // Keyboard accessibility - allow selection with keyboard
-            card.addEventListener('keydown', function(e) {
-                if (e.key === ' ' || e.key === 'Enter') {
-                    // Don't handle if target is the view details link
-                    if (e.target.classList.contains('view-details')) {
-                        return;
-                    }
-                    
-                    // Prevent default space bar behavior (scroll)
-                    e.preventDefault();
-                    
-                    // Find the radio button in this card and check it
-                    const radio = this.querySelector('input[type="radio"]');
-                    radio.checked = true;
-                    
-                    // Trigger change event
-                    radio.dispatchEvent(new Event('change'));
-                }
-            });
-        });
+        // Event delegation cho các thẻ ứng viên
+        candidatesContainer.addEventListener('click', handleCandidateInteraction);
         
-        // Add event listeners to candidate radio inputs
-        candidateRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                // Enable the proceed button when a selection is made
-                proceedButton.disabled = false;
-                
-                // Highlight the selected candidate card
-                document.querySelectorAll('.candidate-card').forEach(card => {
-                    if (card.contains(this)) {
-                        card.classList.add('selected');
-                    } else {
-                        card.classList.remove('selected');
-                    }
-                });
-            });
-        });
-        
-        // Setup "View Details" links
-        viewDetailsLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Get candidate ID from data attribute
-                const candidateId = this.getAttribute('data-candidate');
-                if (!candidateId) return;
-                
-                // Find the candidate card
-                const candidateCard = this.closest('.candidate-card');
-                if (!candidateCard) return;
-                
-                // Get candidate details
-                const candidateName = candidateCard.querySelector('h3').textContent;
-                const candidateParty = candidateCard.querySelector('.party').textContent;
-                const candidateBio = candidateCard.querySelector('.bio').textContent;
-                
-                // Show candidate details in modal
-                showCandidateDetailsModal(candidateId, candidateName, candidateParty, candidateBio);
-            });
-        });
+        // Xử lý sự kiện bàn phím cho trợ năng
+        candidatesContainer.addEventListener('keydown', handleKeyboardNavigation);
         
         // Reset selection button
-        resetButton.addEventListener('click', function() {
-            candidateRadios.forEach(radio => {
-                radio.checked = false;
-            });
-            
-            document.querySelectorAll('.candidate-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            proceedButton.disabled = true;
-        });
+        resetButton.addEventListener('click', resetSelection);
         
         // Proceed to review button
-        proceedButton.addEventListener('click', function() {
-            // Store the selected candidate
-            const selectedCandidate = document.querySelector('input[name="candidate"]:checked');
-            if (!selectedCandidate) {
-                EVoting.ui.showAlert("Vui lòng chọn một ứng viên để tiếp tục.", "warning");
-                return;
-            }
-            
-            // Get candidate information for review
-            const candidateCard = selectedCandidate.closest('.candidate-card');
-            const candidateName = candidateCard.querySelector('h3').textContent;
-            const candidateParty = candidateCard.querySelector('.party').textContent;
-            
-            // Store selection in session storage or application state
-            EVoting.state.selectedCandidate = {
-                id: selectedCandidate.value,
-                name: candidateName,
-                party: candidateParty
-            };
-            
-            console.log("Selected candidate:", EVoting.state.selectedCandidate);
-            
-            // Show loading while preparing next step
-            EVoting.ui.showLoading("Đang chuẩn bị thông tin xem lại...");
-            
-            // Simulate server processing
-            setTimeout(function() {
-                EVoting.ui.hideLoading();
-                
-                // Hide voting section and show review section
-                document.getElementById('voting-step').style.display = 'none';
-                
-                // Load and show review section
-                const reviewSection = document.querySelector('.review-section');
-                if (reviewSection) {
-                    reviewSection.style.display = 'block';
-                    // If we have a function to initialize the review section
-                    if (typeof initializeReview === 'function') {
-                        initializeReview();
-                    }
-                }
-                
-                // Update progress bar
-                const steps = document.querySelectorAll('.progress-steps .step');
-                steps.forEach((step, index) => {
-                    if (index < 2) {
-                        step.classList.remove('active');
-                        step.classList.add('completed');
-                    } else if (index === 2) {
-                        step.classList.add('active');
-                    } else {
-                        step.classList.remove('active', 'completed');
-                    }
-                });
-            }, 1500);
-        });
+        proceedButton.addEventListener('click', proceedToReview);
         
-        // Setup modal close buttons
-        const modalCloseButtons = document.querySelectorAll('.modal .close-btn, .modal .modal-close');
-        modalCloseButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Find the closest modal and hide it
-                const modal = this.closest('.modal');
-                if (modal) {
-                    modal.classList.remove('active');
-                }
-            });
+        // Xử lý sự kiện đóng modal - event delegation
+        document.addEventListener('click', handleModalCloseClick);
+        
+        // Xử lý phím ESC để đóng modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAllModals();
+            }
         });
     }
     
-    // Function to show candidate details in modal
+    // Xử lý sự kiện click vào thẻ ứng viên
+    function handleCandidateInteraction(e) {
+        const candidateCard = e.target.closest(selectors.candidateCard);
+        
+        // Nếu click vào "Xem chi tiết"
+        if (e.target.classList.contains('view-details') || e.target.closest('.view-details')) {
+            e.preventDefault();
+            handleViewDetails(e);
+            return;
+        }
+        
+        // Nếu click vào thẻ ứng viên
+        if (candidateCard) {
+            const radio = candidateCard.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                handleCandidateSelection(radio);
+            }
+        }
+    }
+    
+    // Xử lý khi "Xem chi tiết" được nhấp vào
+    function handleViewDetails(e) {
+        const link = e.target.closest('.view-details');
+        if (!link) return;
+        
+        const candidateId = link.getAttribute('data-candidate');
+        if (!candidateId) return;
+        
+        const candidateCard = link.closest('.candidate-card');
+        if (!candidateCard) return;
+        
+        const candidateName = candidateCard.querySelector('h3').textContent;
+        const candidateParty = candidateCard.querySelector('.party').textContent;
+        const candidateBio = candidateCard.querySelector('.bio').textContent;
+        
+        showCandidateDetailsModal(candidateId, candidateName, candidateParty, candidateBio);
+    }
+    
+    // Xử lý phím bấm cho trợ năng
+    function handleKeyboardNavigation(e) {
+        if (e.key !== ' ' && e.key !== 'Enter') return;
+        
+        const candidateCard = e.target.closest(selectors.candidateCard);
+        if (!candidateCard) return;
+        
+        // Đừng xử lý nếu đang focus vào link xem chi tiết
+        if (e.target.classList.contains('view-details')) return;
+        
+        e.preventDefault(); // Ngăn scroll khi nhấn space
+        
+        const radio = candidateCard.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.checked = true;
+            handleCandidateSelection(radio);
+        }
+    }
+    
+    // Xử lý việc chọn ứng viên
+    function handleCandidateSelection(selectedRadio) {
+        // Cập nhật state
+        state.selectedCandidateId = selectedRadio.value;
+        
+        // Enable the proceed button
+        const proceedButton = document.querySelector(selectors.proceedButton);
+        if (proceedButton) {
+            proceedButton.disabled = false;
+        }
+        
+        // Highlight card đã chọn
+        document.querySelectorAll(selectors.candidateCard).forEach(card => {
+            if (card.contains(selectedRadio)) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+        });
+    }
+    
+    // Đóng tất cả modal đang mở
+    function closeAllModals() {
+        document.querySelectorAll('.modal.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+    
+    // Xử lý sự kiện đóng modal
+    function handleModalCloseClick(e) {
+        const closeButton = e.target.closest(selectors.closeModal);
+        if (closeButton) {
+            const modal = closeButton.closest('.modal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+    }
+    
+    // Reset lựa chọn
+    function resetSelection() {
+        // Bỏ chọn tất cả radio button
+        document.querySelectorAll(selectors.candidateRadio).forEach(radio => {
+            radio.checked = false;
+        });
+        
+        // Bỏ highlight tất cả card
+        document.querySelectorAll(selectors.candidateCard).forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        // Disable nút tiếp tục
+        const proceedButton = document.querySelector(selectors.proceedButton);
+        if (proceedButton) {
+            proceedButton.disabled = true;
+        }
+        
+        // Reset state
+        state.selectedCandidateId = null;
+    }
+    
+    // Chuyển sang bước xem lại
+    function proceedToReview() {
+        // Kiểm tra xem đã chọn ứng cử viên chưa
+        const selectedCandidate = document.querySelector(`${selectors.candidateRadio}:checked`);
+        if (!selectedCandidate) {
+            EVoting.ui.showAlert("Vui lòng chọn một ứng viên để tiếp tục.", "warning");
+            return;
+        }
+        
+        // Lấy thông tin ứng viên đã chọn
+        const candidateCard = selectedCandidate.closest(selectors.candidateCard);
+        const candidateData = {
+            id: selectedCandidate.value,
+            name: candidateCard.querySelector('h3').textContent,
+            party: candidateCard.querySelector('.party').textContent
+        };
+        
+        // Lưu vào state
+        EVoting.state.selectedCandidate = candidateData;
+        console.log("Selected candidate:", EVoting.state.selectedCandidate);
+        
+        // Hiện loading
+        EVoting.ui.showLoading("Đang chuẩn bị thông tin xem lại...");
+        
+        // Chuyển sang bước xem lại sau khi loading
+        setTimeout(() => {
+            EVoting.ui.hideLoading();
+            
+            // Ẩn bước bỏ phiếu, hiện bước xem lại
+            document.getElementById('voting-step').style.display = 'none';
+            
+            const reviewSection = document.querySelector('.review-section');
+            if (reviewSection) {
+                reviewSection.style.display = 'block';
+                
+                // Khởi tạo phần xem lại nếu có
+                if (typeof initializeReview === 'function') {
+                    initializeReview();
+                }
+            }
+            
+            // Cập nhật thanh tiến trình
+            updateProgressBar(2); // Review là bước 3 (index 2)
+        }, 1500);
+    }
+    
+    // Hiển thị thông tin chi tiết ứng viên trong modal
     function showCandidateDetailsModal(candidateId, name, party, shortBio) {
-        // Get the modal element
-        const modal = document.getElementById('candidate-details-modal');
-        const modalContent = document.getElementById('candidate-details-content');
+        const modal = document.querySelector(selectors.modal);
+        const modalContent = document.querySelector(selectors.modalContent);
         
         if (!modal || !modalContent) {
             console.error("Candidate details modal not found");
             return;
         }
         
-        // Prepare detailed info
-        // In a real application, you would fetch this from a server
-        // This is a simulated extended bio based on the short one
-        const extendedInfo = getCandidateExtendedInfo(candidateId, name, party, shortBio);
+        // Lấy thông tin chi tiết từ repository
+        const extendedInfo = getCandidateInfo(candidateId, name, party, shortBio);
         
-        // Populate modal content
-        modalContent.innerHTML = `
+        // Tạo HTML content với destructuring để code sạch hơn
+        const { bio, education, policies } = extendedInfo;
+        
+        // Render với template literals
+        modalContent.innerHTML = createCandidateDetailHTML(candidateId, name, party, bio, education, policies);
+        
+        // Hiện modal và focus vào nó (cho trợ năng)
+        modal.classList.add('active');
+        modal.focus();
+    }
+    
+    // Tạo HTML cho thông tin chi tiết ứng viên
+    function createCandidateDetailHTML(candidateId, name, party, bio, education, policies) {
+        return `
             <div class="candidate-detail-header">
                 <div class="candidate-detail-photo">
                     <img src="assets/candidates/${candidateId}.jpg" alt="${name}">
@@ -262,34 +321,48 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="candidate-detail-sections">
                 <div class="detail-section">
                     <h4>Tiểu sử</h4>
-                    <p>${extendedInfo.bio}</p>
+                    <p>${bio}</p>
                 </div>
                 
                 <div class="detail-section">
                     <h4>Học vấn và Kinh nghiệm</h4>
                     <ul>
-                        ${extendedInfo.education.map(item => `<li>${item}</li>`).join('')}
+                        ${education.map(item => `<li>${formatEducationItem(item)}</li>`).join('')}
                     </ul>
                 </div>
                 
                 <div class="detail-section">
                     <h4>Chính sách chính</h4>
-                    <ul>
-                        ${extendedInfo.policies.map(item => `<li>${item}</li>`).join('')}
+                    <ul class="ordered">
+                        ${policies.map(item => `<li>${item}</li>`).join('')}
                     </ul>
                 </div>
             </div>
         `;
-        
-        // Show the modal
-        modal.classList.add('active');
     }
     
-    // Function to get extended candidate information
-    // In a real application, this would be fetched from a server
-    function getCandidateExtendedInfo(candidateId, name, party, shortBio) {
-        // Simulated extended information based on candidateId
-        const candidateInfo = {
+    // Định dạng mục học vấn
+    function formatEducationItem(item) {
+        if (!item.includes(',')) return item;
+        
+        const [degree, ...rest] = item.split(',');
+        const restText = rest.join(',');
+        
+        // Regex để tìm năm (định dạng YYYY trong ngoặc đơn)
+        const yearMatch = restText.match(/\((\d{4})\)/);
+        if (yearMatch) {
+            const year = yearMatch[0];
+            const school = restText.replace(year, `<span class="highlight">${year}</span>`);
+            return `<span class="highlight">${degree}</span>,${school}`;
+        }
+        
+        return `<span class="highlight">${degree}</span>,${restText}`;
+    }
+    
+    // Repository dữ liệu ứng viên
+    function getCandidateInfo(candidateId, name, party, shortBio) {
+        // Dữ liệu mẫu - thực tế nên lấy từ server
+        const candidateRepository = {
             candidate1: {
                 bio: "Nguyễn Văn A là một chính trị gia kỳ cựu với hơn 20 năm kinh nghiệm trong lĩnh vực chính trị và quản lý nhà nước. Ông đã từng đảm nhiệm nhiều vị trí quan trọng trong bộ máy chính quyền và có nhiều đóng góp trong việc đổi mới, cải cách hành chính và phát triển kinh tế.",
                 education: [
@@ -348,11 +421,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         
-        // Return the candidate info or a default if not found
-        return candidateInfo[candidateId] || {
+        // Default data nếu không tìm thấy
+        const defaultData = {
             bio: shortBio || "Không có thông tin chi tiết.",
             education: ["Không có thông tin về học vấn."],
             policies: ["Không có thông tin về chính sách."]
         };
+        
+        return candidateRepository[candidateId] || defaultData;
     }
 }); 

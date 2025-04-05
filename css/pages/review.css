@@ -1,50 +1,224 @@
 /* Review and Confirmation Styles */
 
 .review-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-5) 0;
+}
+
+.review-header {
     text-align: center;
+    margin-bottom: var(--space-6);
 }
 
-.review-section h2 {
+.review-header h2 {
     color: var(--primary-color);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
 }
 
-.review-summary {
-    background-color: var(--off-white);
+.review-instructions {
+    max-width: 650px;
+    margin: 0 auto;
+    color: var(--secondary-color);
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+}
+
+.review-content {
+    margin-bottom: var(--space-6);
+}
+
+/*==================================
+  2. REVIEW CARD
+==================================*/
+
+.review-card {
+    background-color: var(--white);
     border-radius: var(--border-radius-lg);
-    padding: var(--space-5);
-    margin: var(--space-5) 0;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    margin-bottom: var(--space-5);
 }
 
-.review-item {
-    text-align: left;
-    margin-bottom: var(--space-5);
-    padding-bottom: var(--space-5);
+.review-card-header {
+    padding: var(--space-4);
+    background-color: var(--light-bg);
     border-bottom: 1px solid var(--light-gray);
 }
 
-.review-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
+.review-card-header h3 {
+    color: var(--secondary-dark);
+    margin: 0;
+    font-size: var(--font-size-lg);
 }
 
-.review-item h3 {
-    color: var(--secondary-color);
-    font-size: var(--font-size-lg);
-    margin-bottom: var(--space-2);
+.review-card-body {
+    padding: var(--space-5);
 }
+
+/* Loading spinner for review content */
+.review-card-body .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6) 0;
+    gap: var(--space-3);
+}
+
+/*==================================
+  3. SELECTION SUMMARY
+==================================*/
+
+.selection-item {
+    display: flex;
+    align-items: center;
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--light-gray);
+    gap: var(--space-4);
+}
+
+.selection-item:last-child {
+    border-bottom: none;
+}
+
+.selection-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.selection-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.selection-details {
+    flex: 1;
+}
+
+.selection-details h4 {
+    margin: 0 0 var(--space-1) 0;
+    color: var(--dark-gray);
+}
+
+.selection-details .party {
+    color: var(--primary-color);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+}
+
+.selection-badge {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+}
+
+.no-selection {
+    text-align: center;
+    padding: var(--space-6);
+    color: var(--dark-gray);
+}
+
+.no-selection i {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-3);
+    opacity: 0.5;
+}
+
+/*==================================
+  4. ACTION BUTTONS
+==================================*/
 
 .review-actions {
     display: flex;
     justify-content: space-between;
-    gap: var(--space-4);
+    margin-top: var(--space-6);
+}
+
+.review-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+}
+
+.review-actions .btn-primary {
+    font-weight: var(--font-weight-semibold);
+}
+
+/*==================================
+  5. CONFIRMATION MODAL
+==================================*/
+
+.confirmation-modal-content {
+    width: 100%;
+    max-width: 500px;
+}
+
+.confirmation-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-4);
+}
+
+.confirmation-icon i {
+    font-size: var(--font-size-4xl);
+    color: var(--warning-color);
+}
+
+.confirmation-message {
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+}
+
+.confirmation-message strong {
+    display: block;
+    margin-top: var(--space-3);
+    color: var(--danger-color);
+}
+
+/*==================================
+  6. RESPONSIVE STYLES
+==================================*/
+
+@media (max-width: 768px) {
+    .review-section {
+        padding: var(--space-4) var(--space-3);
+    }
+    
+    .review-card-body {
+        padding: var(--space-3);
+    }
+    
+    .selection-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+    }
+    
+    .selection-photo {
+        width: 50px;
+        height: 50px;
+    }
 }
 
 @media (max-width: 576px) {
     .review-actions {
-        flex-direction: column-reverse;
+        flex-direction: column;
         gap: var(--space-3);
+    }
+    
+    .review-actions .btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 

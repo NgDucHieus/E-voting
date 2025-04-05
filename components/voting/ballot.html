@@ -95,11 +95,11 @@
 </div>
 
 <!-- Candidate Details Modal -->
-<div class="modal" id="candidate-details-modal">
+<div class="modal" id="candidate-details-modal" tabindex="-1" role="dialog" aria-labelledby="candidate-details-title" aria-hidden="true">
     <div class="modal-content candidate-details-content">
         <div class="modal-header">
-            <h2>Thông tin chi tiết ứng viên</h2>
-            <button type="button" class="close-btn">&times;</button>
+            <h2 id="candidate-details-title">Thông tin chi tiết ứng viên</h2>
+            <button type="button" class="close-btn" aria-label="Đóng">&times;</button>
         </div>
         <div class="modal-body" id="candidate-details-content">
             <!-- Content will be loaded dynamically -->
