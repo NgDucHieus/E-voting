@@ -412,4 +412,117 @@ body.modal-open {
     .principles-list {
         grid-template-columns: 1fr;
     }
+}
+
+/* Header Dropdown Menu */
+.main-nav .dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.main-nav .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: var(--space-2) var(--space-3);
+}
+
+.main-nav .dropdown-toggle i {
+    margin-left: 5px;
+    font-size: 12px;
+    transition: transform 0.2s;
+}
+
+.main-nav .dropdown:hover .dropdown-toggle i {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: -40px; /* Offset to center better */
+    z-index: 1000;
+    display: none;
+    min-width: 350px;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.main-nav .dropdown:hover .dropdown-menu {
+    display: block;
+    animation: fadeIn 0.2s;
+}
+
+.dropdown-header {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.dropdown-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+.dropdown-content {
+    padding: 15px;
+}
+
+.dropdown-menu .principle-item {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.dropdown-menu .principle-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu .principle-item i {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    color: #007bff;
+    background-color: #e8f4fd;
+    border-radius: 50%;
+}
+
+.dropdown-menu .principle-item .principle-text {
+    flex: 1;
+}
+
+.dropdown-menu .principle-item .principle-text strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #495057;
+}
+
+.dropdown-footer {
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    text-align: center;
+}
+
+.read-more-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.read-more-link:hover {
+    text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 } 

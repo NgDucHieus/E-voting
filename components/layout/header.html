@@ -8,13 +8,49 @@
         <nav class="main-nav">
             <ul>
                 <li><a href="#" class="active">Home</a></li>
-                <li><a href="#">Instructions</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Hướng dẫn <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <h3>Nguyên tắc bầu cử</h3>
+                        </div>
+                        <div class="dropdown-content">
+                            <div class="principle-item">
+                                <i class="fas fa-balance-scale"></i>
+                                <div class="principle-text">
+                                    <strong>Phổ thông:</strong> Công dân Việt Nam đủ 18 tuổi trở lên đều có quyền bầu cử.
+                                </div>
+                            </div>
+                            <div class="principle-item">
+                                <i class="fas fa-equals"></i>
+                                <div class="principle-text">
+                                    <strong>Bình đẳng:</strong> Mỗi cử tri chỉ có một phiếu bầu với giá trị ngang nhau.
+                                </div>
+                            </div>
+                            <div class="principle-item">
+                                <i class="fas fa-vote-yea"></i>
+                                <div class="principle-text">
+                                    <strong>Trực tiếp:</strong> Cử tri trực tiếp đi bầu cử, không được bầu thay.
+                                </div>
+                            </div>
+                            <div class="principle-item">
+                                <i class="fas fa-user-secret"></i>
+                                <div class="principle-text">
+                                    <strong>Bỏ phiếu kín:</strong> Cử tri bỏ phiếu kín theo ý muốn của mình.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-footer">
+                            <a href="#" class="read-more-link">Xem hướng dẫn đầy đủ</a>
+                        </div>
+                    </div>
+                </li>
                 <li><a href="#">Contact</a></li>
             </ul>
         </nav>
         <div class="auth-section">
             <div class="login-status">
-                <span class="username">Welcome, User</span>
+                <!-- Removed "Welcome, User" text -->
             </div>
             <div class="auth-buttons">
                 <button class="btn btn-primary" id="loginBtn">Login</button>
