@@ -1,0 +1,81 @@
+/* Authentication Pages Styles */
+
+/* Specific styles for authentication steps */
+.auth-step .form-group {
+    margin-bottom: var(--space-5);
+}
+
+/* Biometric options styling */
+.biometric-options button {
+    padding: var(--space-6);
+    width: 100%;
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    transition: all var(--transition-fast) ease;
+}
+
+.biometric-options button i {
+    font-size: var(--font-size-3xl);
+}
+
+/* Verification success animation */
+.verification-success {
+    text-align: center;
+    padding: var(--space-6) 0;
+}
+
+.verification-success i {
+    font-size: var(--font-size-4xl);
+    color: var(--success);
+    animation: bounceIn 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+@keyframes bounceIn {
+    0%, 20%, 40%, 60%, 80%, 100% {
+        animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    20% {
+        transform: scale3d(1.1, 1.1, 1.1);
+    }
+    40% {
+        transform: scale3d(0.9, 0.9, 0.9);
+    }
+    60% {
+        opacity: 1;
+        transform: scale3d(1.03, 1.03, 1.03);
+    }
+    80% {
+        transform: scale3d(0.97, 0.97, 0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+/* Skip option */
+.skip-option button {
+    opacity: 0.7;
+    font-size: var(--font-size-sm);
+}
+
+.skip-option button:hover {
+    opacity: 1;
+}
+
+/* OTP verification specific styles */
+.verification-form .input-group {
+    margin-bottom: var(--space-3);
+}
+
+.verification-form .code-actions {
+    justify-content: flex-start;
+    gap: var(--space-4);
+} 

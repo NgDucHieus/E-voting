@@ -1,0 +1,173 @@
+/* Progress Indicator Styles */
+
+/* Main progress steps */
+.progress-container {
+    margin-bottom: var(--space-6);
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 var(--space-4);
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: calc(var(--space-4) + 25px);
+    right: calc(var(--space-4) + 25px);
+    height: 3px;
+    background-color: var(--light-gray);
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--white);
+    border: 3px solid var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-2);
+    transition: all var(--transition-normal) ease;
+}
+
+.step-text {
+    font-size: var(--font-size-sm);
+    color: var(--dark-gray);
+    text-align: center;
+    transition: color var(--transition-normal) ease;
+}
+
+.step.active .step-number {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.step.active .step-text {
+    color: var(--primary-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+.step.completed .step-number {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+}
+
+/* Authentication steps progress */
+.progress-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    position: relative;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.progress-indicator::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    right: 30px;
+    height: 3px;
+    background-color: var(--light-gray);
+    z-index: 1;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.progress-step .step-number {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--white);
+    border: 3px solid var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-2);
+    transition: all var(--transition-normal) ease;
+}
+
+.progress-step .step-label {
+    font-size: var(--font-size-sm);
+    color: var(--dark-gray);
+    text-align: center;
+    max-width: 120px;
+    transition: color var(--transition-normal) ease;
+}
+
+.progress-step.active .step-number {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.progress-step.active .step-label {
+    color: var(--primary-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+.progress-step.completed .step-number {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+}
+
+/* Loading spinner */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(37, 99, 235, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: var(--z-index-modal);
+    gap: var(--space-4);
+} 

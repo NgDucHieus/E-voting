@@ -1,0 +1,37 @@
+<!-- Step 1.1: Voter Verification -->
+<div class="auth-step active">
+    <div class="step-content">
+        <div class="step-instructions">
+            <h3>Voter ID Verification</h3>
+            <p>Please enter your Voter ID to begin the verification process.</p>
+        </div>
+        <form class="verification-form" id="voterVerificationForm">
+            <div class="form-group">
+                <label for="voter-id">Voter ID</label>
+                <div class="segmented-input">
+                    <div class="input-segment">
+                        <input type="text" id="voter-id-segment-1-auth" maxlength="4" pattern="[0-9]*" inputmode="numeric" placeholder="0000" required>
+                    </div>
+                    <div class="segment-separator">-</div>
+                    <div class="input-segment">
+                        <input type="text" id="voter-id-segment-2-auth" maxlength="4" pattern="[0-9]*" inputmode="numeric" placeholder="0000" required>
+                    </div>
+                    <div class="segment-separator">-</div>
+                    <div class="input-segment">
+                        <input type="text" id="voter-id-segment-3-auth" maxlength="4" pattern="[0-9]*" inputmode="numeric" placeholder="0000" required>
+                    </div>
+                </div>
+                <div class="help-text">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Enter your 12-digit Voter ID (e.g., 1234-5678-9012)</span>
+                </div>
+            </div>
+            <div class="step-actions">
+                <button type="submit" class="btn btn-primary">
+                    <span>Verify & Continue</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div> 

@@ -1,0 +1,144 @@
+/* Typography Styles */
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    margin-bottom: var(--space-3);
+    color: var(--black);
+}
+
+h1 {
+    font-size: var(--font-size-4xl);
+}
+
+h2 {
+    font-size: var(--font-size-3xl);
+}
+
+h3 {
+    font-size: var(--font-size-2xl);
+}
+
+h4 {
+    font-size: var(--font-size-xl);
+}
+
+h5 {
+    font-size: var(--font-size-lg);
+}
+
+h6 {
+    font-size: var(--font-size-md);
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: var(--space-4);
+    line-height: 1.6;
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    transition: color var(--transition-fast) ease;
+}
+
+a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* Text helpers */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-bold {
+    font-weight: var(--font-weight-bold);
+}
+
+.text-semibold {
+    font-weight: var(--font-weight-semibold);
+}
+
+.text-medium {
+    font-weight: var(--font-weight-medium);
+}
+
+.text-normal {
+    font-weight: var(--font-weight-normal);
+}
+
+.text-light {
+    font-weight: var(--font-weight-light);
+}
+
+/* Text colors */
+.text-primary {
+    color: var(--primary-color);
+}
+
+.text-secondary {
+    color: var(--secondary-color);
+}
+
+.text-success {
+    color: var(--success);
+}
+
+.text-error {
+    color: var(--error);
+}
+
+.text-warning {
+    color: var(--warning);
+}
+
+.text-info {
+    color: var(--info);
+}
+
+.text-muted {
+    color: var(--dark-gray);
+}
+
+/* Text sizes */
+.text-xs {
+    font-size: var(--font-size-xs);
+}
+
+.text-sm {
+    font-size: var(--font-size-sm);
+}
+
+.text-md {
+    font-size: var(--font-size-md);
+}
+
+.text-lg {
+    font-size: var(--font-size-lg);
+}
+
+.text-xl {
+    font-size: var(--font-size-xl);
+}
+
+/* Special text elements */
+.help-text {
+    font-size: var(--font-size-sm);
+    color: var(--dark-gray);
+    margin-top: var(--space-1);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+} 

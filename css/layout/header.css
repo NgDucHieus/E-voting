@@ -1,0 +1,122 @@
+/* Header Styles */
+
+.main-header {
+    background-color: var(--white);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-3) 0;
+    position: sticky;
+    top: 0;
+    z-index: var(--z-index-sticky);
+}
+
+.header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+/* Logo section */
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-md);
+}
+
+.system-name {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+    margin-bottom: 0;
+}
+
+/* Navigation */
+.main-nav ul {
+    display: flex;
+    gap: var(--space-4);
+}
+
+.main-nav a {
+    color: var(--secondary-color);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    padding: var(--space-2) 0;
+    position: relative;
+    transition: color var(--transition-fast) ease;
+}
+
+.main-nav a:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.main-nav a.active {
+    color: var(--primary-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+.main-nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+/* Auth section */
+.auth-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+    .auth-section {
+        flex-direction: row;
+        gap: var(--space-4);
+    }
+}
+
+.login-status {
+    font-weight: var(--font-weight-medium);
+}
+
+.auth-buttons {
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .system-name {
+        font-size: var(--font-size-lg);
+    }
+    
+    .main-nav ul {
+        gap: var(--space-2);
+    }
+    
+    .auth-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+} 

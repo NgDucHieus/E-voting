@@ -1,0 +1,145 @@
+/* Main Content Styles */
+
+main {
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+    padding: var(--space-6) 0;
+}
+
+/* Auth Phase Section */
+.auth-phase-section {
+    padding: var(--space-6) 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.auth-steps-container {
+    margin-top: var(--space-6);
+}
+
+.auth-step {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.auth-step .step-content {
+    background-color: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-5);
+}
+
+.step-instructions {
+    text-align: center;
+    margin-bottom: var(--space-5);
+}
+
+.step-instructions h3 {
+    color: var(--primary-color);
+    margin-bottom: var(--space-2);
+}
+
+/* Review Section */
+.review-section {
+    padding: var(--space-6) 0;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.review-summary {
+    background-color: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-5);
+    margin: var(--space-5) 0;
+}
+
+.review-item {
+    margin-bottom: var(--space-4);
+}
+
+.review-item:last-child {
+    margin-bottom: 0;
+}
+
+.review-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+}
+
+/* Voting Section */
+.voting-section {
+    padding: var(--space-6) 0;
+}
+
+.candidates-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+}
+
+@media (min-width: 768px) {
+    .candidates-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.candidate-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    transition: transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
+}
+
+.candidate-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.candidate-photo img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+}
+
+.candidate-info h3 {
+    margin-bottom: var(--space-1);
+}
+
+.candidate-info .party {
+    color: var(--primary-color);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-2);
+}
+
+.candidate-info .bio {
+    font-size: var(--font-size-sm);
+    color: var(--dark-gray);
+}
+
+.candidate-selection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .auth-step .step-content {
+        padding: var(--space-4);
+    }
+    
+    .review-actions {
+        flex-direction: column;
+    }
+} 

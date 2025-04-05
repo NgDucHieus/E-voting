@@ -1,0 +1,94 @@
+/* Voting Interface Styles */
+
+/* Candidates listing */
+.candidates-heading {
+    text-align: center;
+    margin-bottom: var(--space-5);
+}
+
+.candidates-heading h2 {
+    color: var(--primary-color);
+    margin-bottom: var(--space-2);
+}
+
+.candidates-heading p {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Candidate card */
+.candidate-card {
+    border: 2px solid transparent;
+    transition: border-color var(--transition-fast) ease;
+}
+
+.candidate-card:hover {
+    border-color: var(--primary-light);
+}
+
+.candidate-selection input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.candidate-selection label {
+    cursor: pointer;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--border-radius-md);
+    text-align: center;
+    transition: all var(--transition-fast) ease;
+    font-weight: var(--font-weight-medium);
+    width: 100%;
+    display: block;
+}
+
+.candidate-selection input[type="radio"]:checked + label {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.candidate-selection input[type="radio"]:checked ~ .candidate-card {
+    border-color: var(--primary-color);
+}
+
+/* Selected candidate highlight */
+.candidate-card.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+/* Empty state */
+.no-candidates {
+    text-align: center;
+    padding: var(--space-8) 0;
+    color: var(--dark-gray);
+}
+
+.no-candidates i {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--space-4);
+    opacity: 0.5;
+}
+
+/* Loading state */
+.candidates-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-8) 0;
+    gap: var(--space-4);
+}
+
+/* Navigation buttons */
+.voting-navigation {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-6);
+} 

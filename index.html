@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Voting System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Initial states for auth steps */
+        #voter-verification-step {
+            display: block;
+        }
+        #otp-verification-step, 
+        #biometric-verification-step {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <header id="header-container"></header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Progress Indicator -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-text">Authenticate</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">Vote</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">Review</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-text">Complete</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auth Phase Section -->
+        <section class="auth-phase-section">
+            <!-- Progress Indicator -->
+            <div id="auth-progress-indicator"></div>
+            
+            <!-- Authentication Steps Container -->
+            <div class="auth-steps-container">
+                <!-- Voter Verification -->
+                <div id="voter-verification-step" class="auth-step">
+                    <div class="step-content">
+                        <div id="voter-verification"></div>
+                    </div>
+                </div>
+                
+                <!-- OTP Verification -->
+                <div id="otp-verification-step" class="auth-step">
+                    <div class="step-content">
+                        <div id="otp-verification"></div>
+                    </div>
+                </div>
+                
+                <!-- Biometric Verification -->
+                <div id="biometric-verification-step" class="auth-step">
+                    <div class="step-content">
+                        <div id="biometric-verification"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Review Section -->
+        <section class="review-section" style="display: none;">
+            <div id="review-section"></div>
+        </section>
+    </main>
+
+    <!-- Include Footer -->
+    <footer id="footer-container"></footer>
+
+    <!-- Modals -->
+    <div id="login-modal"></div>
+    <div id="signup-modal"></div>
+    <div id="forgot-password-modal"></div>
+
+    <!-- JavaScript Files -->
+    <!-- Main -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        // Function to include HTML components
+        async function includeHTML() {
+            console.log("Loading HTML components...");
+            try {
+                // Include header
+                const headerContainer = document.getElementById('header-container');
+                const headerResponse = await fetch('components/layout/header.html');
+                headerContainer.innerHTML = await headerResponse.text();
+                
+                // Include footer
+                const footerContainer = document.getElementById('footer-container');
+                const footerResponse = await fetch('components/layout/footer.html');
+                footerContainer.innerHTML = await footerResponse.text();
+                
+                // Include authentication progress indicator
+                const progressContainer = document.getElementById('auth-progress-indicator');
+                const progressResponse = await fetch('components/auth/progress-indicator.html');
+                progressContainer.innerHTML = await progressResponse.text();
+                
+                // Include auth steps
+                const voterVerification = document.getElementById('voter-verification');
+                const voterVerificationResponse = await fetch('components/auth/voter-verification.html');
+                voterVerification.innerHTML = await voterVerificationResponse.text();
+                
+                const otpVerification = document.getElementById('otp-verification');
+                const otpVerificationResponse = await fetch('components/auth/otp-verification.html');
+                otpVerification.innerHTML = await otpVerificationResponse.text();
+                
+                const biometricVerification = document.getElementById('biometric-verification');
+                const biometricVerificationResponse = await fetch('components/auth/biometric-verification.html');
+                biometricVerification.innerHTML = await biometricVerificationResponse.text();
+                
+                // Include review section
+                const reviewSection = document.getElementById('review-section');
+                const reviewResponse = await fetch('components/auth/review-section.html');
+                reviewSection.innerHTML = await reviewResponse.text();
+                
+                // Include modals
+                const loginModal = document.getElementById('login-modal');
+                const loginResponse = await fetch('components/modals/login-modal.html');
+                loginModal.innerHTML = await loginResponse.text();
+                
+                const signupModal = document.getElementById('signup-modal');
+                const signupResponse = await fetch('components/modals/signup-modal.html');
+                signupModal.innerHTML = await signupResponse.text();
+                
+                const forgotPasswordModal = document.getElementById('forgot-password-modal');
+                const forgotPasswordResponse = await fetch('components/modals/forgot-password-modal.html');
+                forgotPasswordModal.innerHTML = await forgotPasswordResponse.text();
+                
+                console.log("All components loaded successfully");
+                
+                // Now that all components are loaded, initialize the auth steps
+                initAuthSteps();
+            } catch (error) {
+                console.error("Error loading components:", error);
+            }
+        }
+        
+        // Load all components when the document is ready
+        document.addEventListener('DOMContentLoaded', includeHTML);
+    </script>
+    
+    <script>
+        // Direct implementation of auth steps to avoid loading delay
+        function initAuthSteps() {
+            console.log("Initializing auth steps directly");
+            
+            // Get all auth steps
+            const voterVerificationStep = document.getElementById('voter-verification-step');
+            const otpVerificationStep = document.getElementById('otp-verification-step');
+            const biometricVerificationStep = document.getElementById('biometric-verification-step');
+            
+            if (!voterVerificationStep || !otpVerificationStep || !biometricVerificationStep) {
+                console.error("Auth step elements not found");
+                return;
+            }
+            
+            // Update progress indicator
+            updateProgressIndicator(1);
+            
+            // Handle voter verification form submission
+            const voterVerificationForm = document.querySelector('#voter-verification-step form');
+            console.log("Voter verification form:", voterVerificationForm);
+            
+            if (voterVerificationForm) {
+                voterVerificationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log("Voter verification form submitted");
+                    
+                    // Show loading state on button
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    submitBtn.disabled = true;
+                    
+                    // Simulate verification (Replace with actual API call)
+                    setTimeout(function() {
+                        console.log("Transitioning to OTP verification step");
+                        // Hide current step and show next step
+                        voterVerificationStep.style.display = 'none';
+                        otpVerificationStep.style.display = 'block';
+                        
+                        // Update progress indicator
+                        updateProgressIndicator(2);
+                        
+                        // Reset button state
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                    }, 1500);
+                });
+            } else {
+                console.error("Voter verification form not found");
+            }
+            
+            // Handle OTP verification form submission
+            const otpVerificationForm = document.querySelector('#otp-verification-step form');
+            console.log("OTP verification form:", otpVerificationForm);
+            
+            if (otpVerificationForm) {
+                otpVerificationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log("OTP verification form submitted");
+                    
+                    // Show loading state on button
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    submitBtn.disabled = true;
+                    
+                    // Simulate verification (Replace with actual API call)
+                    setTimeout(function() {
+                        console.log("Transitioning to biometric verification step");
+                        // Hide current step and show next step
+                        otpVerificationStep.style.display = 'none';
+                        biometricVerificationStep.style.display = 'block';
+                        
+                        // Update progress indicator
+                        updateProgressIndicator(3);
+                        
+                        // Reset button state
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                    }, 1500);
+                });
+            }
+            
+            // Handle biometric verification form submission
+            const biometricVerificationForm = document.querySelector('#biometric-verification-step form');
+            console.log("Biometric verification form:", biometricVerificationForm);
+            
+            if (biometricVerificationForm) {
+                biometricVerificationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log("Biometric verification form submitted");
+                    
+                    // Show loading state on button
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    submitBtn.disabled = true;
+                    
+                    // Simulate verification (Replace with actual API call)
+                    setTimeout(function() {
+                        console.log("Authentication complete");
+                        // Hide auth steps section and show success or proceed to voting interface
+                        document.querySelector('.auth-phase-section').style.display = 'none';
+                        
+                        // Here you would redirect to voting interface or show success message
+                        // For now, just show an alert
+                        showAlert('Authentication successful! Redirecting to voting interface...', 'success');
+                        
+                        // Reset button state
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                    }, 1500);
+                });
+            }
+        }
+        
+        // Update progress indicator
+        function updateProgressIndicator(activeStep) {
+            console.log("Updating progress indicator to step", activeStep);
+            const steps = document.querySelectorAll('.progress-step');
+            steps.forEach((step, index) => {
+                if (index + 1 < activeStep) {
+                    step.classList.remove('active');
+                    step.classList.add('completed');
+                } else if (index + 1 === activeStep) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+        }
+        
+        // Show alert function
+        function showAlert(message, type) {
+            const alertContainer = document.querySelector('.alert-container') || createAlertContainer();
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            let icon = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-exclamation-circle"></i>';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    break;
+                case 'info':
+                    icon = '<i class="fas fa-info-circle"></i>';
+                    break;
+            }
+            
+            alert.innerHTML = `${icon} <span>${message}</span>`;
+            alertContainer.appendChild(alert);
+            
+            // Remove alert after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+        
+        // Create alert container if not exists
+        function createAlertContainer() {
+            const container = document.createElement('div');
+            container.className = 'alert-container';
+            document.body.appendChild(container);
+            return container;
+        }
+    </script>
+</body>
+</html>

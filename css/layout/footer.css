@@ -1,0 +1,68 @@
+/* Footer Styles */
+
+.main-footer {
+    background-color: var(--secondary-dark);
+    color: var(--white);
+    padding: var(--space-6) 0;
+    margin-top: var(--space-8);
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .footer-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+}
+
+.footer-section {
+    flex: 1;
+}
+
+.footer-section ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+@media (min-width: 768px) {
+    .footer-section ul {
+        align-items: center;
+    }
+}
+
+.footer-section a {
+    color: var(--light-gray);
+    text-decoration: none;
+    transition: color var(--transition-fast) ease;
+}
+
+.footer-section a:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+/* Copyright text */
+.footer-section:first-child p {
+    margin-bottom: 0;
+}
+
+/* Support email */
+.footer-section:last-child {
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    .footer-section:last-child {
+        text-align: right;
+    }
+} 
