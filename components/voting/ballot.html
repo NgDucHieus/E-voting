@@ -6,7 +6,11 @@
 
     <div class="candidates-list" id="candidates-container">
         <!-- Candidate 1 -->
-        <div class="candidate-card">
+        <div class="candidate-card" tabindex="0">
+            <div class="candidate-radio">
+                <input type="radio" id="candidate1" name="candidate" value="candidate1">
+                <label for="candidate1"></label>
+            </div>
             <div class="candidate-photo">
                 <img src="assets/candidates/candidate1.jpg" alt="Nguyễn Văn A">
             </div>
@@ -14,15 +18,16 @@
                 <h3>Nguyễn Văn A</h3>
                 <div class="party">Đảng Nhân dân</div>
                 <p class="bio">Ứng cử viên có hơn 20 năm kinh nghiệm trong lĩnh vực chính trị và quản lý nhà nước.</p>
-            </div>
-            <div class="candidate-selection">
-                <input type="radio" id="candidate1" name="candidate" value="candidate1">
-                <label for="candidate1">Chọn ứng viên này</label>
+                <a href="#" class="view-details" data-candidate="candidate1">Xem chi tiết</a>
             </div>
         </div>
 
         <!-- Candidate 2 -->
-        <div class="candidate-card">
+        <div class="candidate-card" tabindex="0">
+            <div class="candidate-radio">
+                <input type="radio" id="candidate2" name="candidate" value="candidate2">
+                <label for="candidate2"></label>
+            </div>
             <div class="candidate-photo">
                 <img src="assets/candidates/candidate2.jpg" alt="Trần Thị B">
             </div>
@@ -30,15 +35,16 @@
                 <h3>Trần Thị B</h3>
                 <div class="party">Đảng Dân chủ</div>
                 <p class="bio">Chuyên gia kinh tế với nhiều đóng góp trong việc phát triển chính sách kinh tế quốc gia.</p>
-            </div>
-            <div class="candidate-selection">
-                <input type="radio" id="candidate2" name="candidate" value="candidate2">
-                <label for="candidate2">Chọn ứng viên này</label>
+                <a href="#" class="view-details" data-candidate="candidate2">Xem chi tiết</a>
             </div>
         </div>
 
         <!-- Candidate 3 -->
-        <div class="candidate-card">
+        <div class="candidate-card" tabindex="0">
+            <div class="candidate-radio">
+                <input type="radio" id="candidate3" name="candidate" value="candidate3">
+                <label for="candidate3"></label>
+            </div>
             <div class="candidate-photo">
                 <img src="assets/candidates/candidate3.jpg" alt="Lê Văn C">
             </div>
@@ -46,15 +52,16 @@
                 <h3>Lê Văn C</h3>
                 <div class="party">Đảng Tiến bộ</div>
                 <p class="bio">Nhà lãnh đạo trẻ với tầm nhìn hiện đại về phát triển đất nước và hội nhập quốc tế.</p>
-            </div>
-            <div class="candidate-selection">
-                <input type="radio" id="candidate3" name="candidate" value="candidate3">
-                <label for="candidate3">Chọn ứng viên này</label>
+                <a href="#" class="view-details" data-candidate="candidate3">Xem chi tiết</a>
             </div>
         </div>
 
         <!-- Candidate 4 -->
-        <div class="candidate-card">
+        <div class="candidate-card" tabindex="0">
+            <div class="candidate-radio">
+                <input type="radio" id="candidate4" name="candidate" value="candidate4">
+                <label for="candidate4"></label>
+            </div>
             <div class="candidate-photo">
                 <img src="assets/candidates/candidate4.jpg" alt="Phạm Thị D">
             </div>
@@ -62,10 +69,7 @@
                 <h3>Phạm Thị D</h3>
                 <div class="party">Đảng Đổi mới</div>
                 <p class="bio">Chuyên gia về luật quốc tế và ngoại giao với kinh nghiệm làm việc tại các tổ chức quốc tế.</p>
-            </div>
-            <div class="candidate-selection">
-                <input type="radio" id="candidate4" name="candidate" value="candidate4">
-                <label for="candidate4">Chọn ứng viên này</label>
+                <a href="#" class="view-details" data-candidate="candidate4">Xem chi tiết</a>
             </div>
         </div>
     </div>
@@ -87,5 +91,21 @@
     <div class="voting-navigation">
         <button type="button" class="btn btn-outline" id="reset-selection">Xóa lựa chọn</button>
         <button type="button" class="btn btn-primary" id="proceed-to-review" disabled>Xem lại phiếu bầu</button>
+    </div>
+</div>
+
+<!-- Candidate Details Modal -->
+<div class="modal" id="candidate-details-modal">
+    <div class="modal-content candidate-details-content">
+        <div class="modal-header">
+            <h2>Thông tin chi tiết ứng viên</h2>
+            <button type="button" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body" id="candidate-details-content">
+            <!-- Content will be loaded dynamically -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline modal-close">Đóng</button>
+        </div>
     </div>
 </div> 
