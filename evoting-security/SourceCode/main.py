@@ -12,11 +12,27 @@ pink = '\u001b[35;1m'
 
 class poll:
     def __init__(self):
-        self.signer = bs.Signer()
+        self.signer = bs.Signer(self.getListOfEligibleVoters())
         self.publicKey = self.signer.getPublicKey()
+        self.listOfEligibleVoters = self.getListOfEligibleVoters()
         self.n = self.publicKey['n']
         self.e = self.publicKey['e']
         
+    def getListOfEligibleVoters(self):
+        listOfEligibleVoters = [1,2,3,4,5]
+        listOfEligibleVoters_hash = []
+        print("\u001b[35;1mList of eligible voters: \u001b[0m", listOfEligibleVoters, end="\n\n")
+        # Hash the list of eligible voters
+        for i in listOfEligibleVoters:
+            concat_message = str(i) 
+            print("\u001b[35;1mHash of idNumber: \u001b[0m",  end="\n\n")
+            idNumber_hash = hashlib.sha256(concat_message.encode('utf-8')).hexdigest()
+            idNumber_hash = int(idNumber_hash,16)
+            listOfEligibleVoters_hash.append(idNumber_hash)
+            print("\u001b[33;1mHash(idNumber): \u001b[0m", idNumber_hash, end="\n\n")
+
+        print("\u001b[35;1mList of eligible voters: \u001b[0m", listOfEligibleVoters_hash, end="\n\n")
+        return listOfEligibleVoters_hash
     def poll_response(self, poll_answer, eligble_answer):
        
        if (eligble_answer == 0):
@@ -58,7 +74,10 @@ class poll:
        print()
        
        print("\u001b[35;1m(f) Sends m'(blinded message) to signing authority\u001b[0m")
-       signedBlindMessage = self.signer.signMessage(blindMessage, voter.getEligibility())
+       e_id = input("\u001b[32;1mEnter your id number di: \u001b[0m")
+       id_hash = hashlib.sha256(e_id.encode('utf-8')).hexdigest()
+       id_hash = int(id_hash,16)
+       signedBlindMessage = self.signer.signMessage(blindMessage, voter.getEligibility(), id_hash)
  
        if signedBlindMessage == None:
            print("\u001b[31;1mINELIGIBLE VOTER....VOTE NOT AUTHORIZED!\u001b[0m")

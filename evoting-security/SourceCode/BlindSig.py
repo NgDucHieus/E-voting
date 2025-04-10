@@ -3,8 +3,10 @@ import cryptomath, random, hashlib
 # n has to be greater than m otherwise lossy message
 class Signer:
     
-    def __init__(self):
+    def __init__(self, eligibleList):
         self.publicKey, self.privateKey = (self.generateInformation())
+        self.eligible = eligibleList
+        print("\u001b[35;1mList of eligible voters dmm: \u001b[0m", self.eligible, end="\n\n")
     
     
     def generateInformation(self):
@@ -77,7 +79,10 @@ class Signer:
     def getPublicKey(self):
         return self.publicKey
     
-    def signMessage(self, message, eligible):
+    def signMessage(self, message, eligible, elifible_id):
+        print ("Eligible Voter ID: ", elifible_id, end='\n\n')
+        print(self.eligible, end='\n\n')
+        print(elifible_id in self.eligible, end='\n\n')
         
         print('\n\n')
         for i in range(100):
@@ -93,13 +98,14 @@ class Signer:
         print("\u001b[32;1m3. Signing Authority Authorizes Ballot\u001b[0m", end='\n\n')
         print("\u001b[35;1m(a) Signing authority receives m'\u001b[0m", end='\n\n')
         print("\u001b[35;1m(b) Signing authority verifies whether voter is eligible to vote\u001b[0m", end='\n\n')
-        if eligible == "y":
+        if eligible == "y" and (elifible_id in self.eligible):
             print("\u001b[35;1m(c) If voter is eligible, signing authority signs ballot: sign = ((blinded message)^d)mod n = ((m* (r^e))^d) mod n = (m^d * r^(ed)) mod n = (m^d * r^1) mod n = (m^d * r) mod n(where d is the private key of the signing authority)\u001b[0m", end='\n\n')
             s= pow(message, self.privateKey['d'], self.publicKey['n']) #important # ERR1
             print("\u001b[33;1mSign by Signing Authority: \u001b[0m", s, end='\n\n')
             print("\u001b[35;1m(d) Sends s' back to voter\u001b[0m", end='\n\n')
             return s
         else:
+            print("\u001b[31;1mSigning authority has not signed the ballot as the voter is not eligible to vote.\u001b[0m", end='\n\n')
             return None
         
     def verifyVoter(self, eligible):
